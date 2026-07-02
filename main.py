@@ -1,21 +1,11 @@
-def add_income():
-    dictionary={}
-    
-    transaction_type="Income"
-    income=int(input("Enter amount:"))
+def add_transaction(transaction_type: str):
+    amount=int(input("Enter amount:"))
     description=input("Enter description:")
-    #key=["type","amount","description"]
-    #value=[transaction_type,income,description]
-    #for i in range(len(key)):
-    #    dictionary[key[i]]=value[i]
-    dictionary={"type":transaction_type,
-                "amount":income,
+    transaction_detail={"type":transaction_type,
+                "amount":amount,
                 "description":description
                 }
-    return dictionary
-
-def add_expense():
-    return ("You chose Add Expense")
+    return transaction_detail
 
 def view_transaction():
     return ("You chose View Transactions")
@@ -31,10 +21,11 @@ def main():
     user_choice=display_menu()
 
     if user_choice==1:
-        income_added=(add_income())
+        income_added=(add_transaction("income"))
         print(income_added)
     elif user_choice==2:
-        print(add_expense())
+        expense_added=(add_transaction("expense"))
+        print(expense_added)
     elif user_choice==3:
         print(view_transaction())
     elif user_choice==4:
