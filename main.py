@@ -1,7 +1,9 @@
-def add_transaction(transaction_type: str):
+from datetime import datetime
+def add_transaction(transaction_type: str, date: datetime):
     amount=int(input("Enter amount:"))
     description=input("Enter description:")
-    transaction_detail={"type":transaction_type,
+    transaction_detail={"date":date,
+                "type":transaction_type,
                 "amount":amount,
                 "description":description
                 }
@@ -14,20 +16,37 @@ def save_transaction(transaction: dict,transaction_list: list):
 def view_transaction(transaction_list: list):
     formatted_result=[]
     for transactions in transaction_list:
+        date=transactions['date']
         transaction_type=transactions['type']
         amount=transactions['amount']
         description=transactions['description']
-        formatted_result.append(f"Transaction Type:{transaction_type} Amount:{amount} Description:{description}")
+        formatted_result.append(
+                        f"--------------------------\n"
+                        f"Date: {date.strftime('%d.%m.%Y')}\n"
+                        f"Transaction Type: {transaction_type}\n"
+                        f"Amount: {amount}\n"
+                        f"Description: {description}\n"
+                        f"--------------------------"
+                                )
     return formatted_result
 
     
-
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
     user_choice=int(input("1.Add Income\n2.Add Spends\n3.View Transaction\n4.Exit\nYour Choice: "))
     return user_choice
     
-
+def get_transaction_date():
+    while True:
+        date_choice=int(input("Update Date Press 1 Or Continue with Today's Date Press 2: "))
+        if date_choice==1:
+            date=input("Enter Date (DD.MM.YYYY): ")
+            date=datetime.strptime(date,'%d.%m.%Y')
+            return date
+        elif date_choice==2:
+            return datetime.today()
+        else:
+            print("Invalid Choice Enter Again!!!")
 
 def main():
     transaction_list=[]
@@ -47,23 +66,17 @@ def main():
                 print("No Transactions to show.")        
                     
         elif user_choice==4:
-            print("Goodbye!")
+            print("Goodbye!!!")
             break
         else:
             print("Invalid menu option.")
         
         if user_choice in(1,2):
-            transaction=add_transaction(transact_typ)
+            date=get_transaction_date()
+            transaction=add_transaction(transact_typ,date)
             save_transaction(transaction,transaction_list)
-    
-    #transaction_list=[{'type': 'Income', 'amount': 500, 'description': 'abc'}, {'type': 'Expense', 'amount': 433, 'description': 'dsa'}]
-    #formatted=view_transaction(transaction_list)
-    #for item in formatted:
-        #print(item)
-    #    if formatted!=[]:
-    #        print(item)
-        
-    #print("No Transactions to show.") 
+            
+                
 
 if __name__=="__main__":
     main()
