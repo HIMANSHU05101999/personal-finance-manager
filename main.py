@@ -1,4 +1,6 @@
 from datetime import datetime
+import json 
+from pathlib import Path
 def add_transaction(transaction_type: str, date: datetime):
     amount=int(input("Enter amount:"))
     description=input("Enter description:")
@@ -9,8 +11,11 @@ def add_transaction(transaction_type: str, date: datetime):
                 }
     return transaction_detail
 
-def save_transaction(transaction: dict,transaction_list: list):
+def save_transaction(transaction: dict,transaction_list: list, transaction_file: str):
     transaction_list.append(transaction)
+    with open(transaction_file,"w") as trans_file:
+        json.dump(transaction_list, trans_file, indent=4)
+    
     
     
 def view_transaction(transaction_list: list):
@@ -22,7 +27,7 @@ def view_transaction(transaction_list: list):
         description=transactions['description']
         formatted_result.append(
                         f"--------------------------\n"
-                        f"Date: {date.strftime('%d.%m.%Y')}\n"
+                        f"Date: {date}\n"
                         f"Transaction Type: {transaction_type}\n"
                         f"Amount: {amount}\n"
                         f"Description: {description}\n"
@@ -30,6 +35,19 @@ def view_transaction(transaction_list: list):
                                 )
     return formatted_result
 
+def load_transaction(transaction_file: str):
+    try:
+        with open(transaction_file) as trans_file:
+            database_transaction=json.load(trans_file)
+    
+    except FileNotFoundError:
+            data=[]
+            with open(transaction_file,"w") as file:
+                json.dump(data, file, indent=4)
+
+    except json.JSONDecodeError:
+            return [] 
+            
     
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
@@ -41,15 +59,16 @@ def get_transaction_date():
         date_choice=int(input("Update Date Press 1 Or Continue with Today's Date Press 2: "))
         if date_choice==1:
             date=input("Enter Date (DD.MM.YYYY): ")
-            date=datetime.strptime(date,'%d.%m.%Y')
+            date=str(datetime.strptime(date,'%d.%m.%Y'))
             return date
         elif date_choice==2:
-            return datetime.today()
+            return datetime.today().strftime('%d.%m.%Y')
         else:
             print("Invalid Choice Enter Again!!!")
 
 def main():
-    transaction_list=[]
+    transaction_file=Path(__file__).parent/"transaction_data.json"
+    transaction_list=load_transaction(transaction_file)
     while True:
         user_choice=display_menu()
         transact_typ=""
@@ -74,7 +93,8 @@ def main():
         if user_choice in(1,2):
             date=get_transaction_date()
             transaction=add_transaction(transact_typ,date)
-            save_transaction(transaction,transaction_list)
+            save_transaction(transaction,transaction_list,transaction_file)
+            
             
                 
 
