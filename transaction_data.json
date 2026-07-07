@@ -4,5 +4,41 @@
         "type": "Expense",
         "amount": 2,
         "description": "2"
+    },
+    {
+        "date": "07.07.2026",
+        "type": "Income",
+        "amount": 500,
+        "description": "abc"
+    },
+    {
+        "date": "07.07.2026",
+        "type": "Expense",
+        "amount": 500,
+        "description": ""
+    },
+    {
+        "date": "08.07.2026",
+        "type": "Income",
+        "amount": 500,
+        "description": "abc"
+    },
+    {
+        "date": "08.07.2026",
+        "type": "Expense",
+        "amount": 500,
+        "description": "bca"
+    },
+    {
+        "date": "08.07.2026",
+        "type": 2,
+        "amount": 500,
+        "description": "ahd"
+    },
+    {
+        "date": "08.07.2026",
+        "type": "Expense",
+        "amount": 5000,
+        "description": "Great"
     }
 ]
