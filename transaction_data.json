@@ -46,5 +46,11 @@
         "type": "Income",
         "amount": 10000,
         "description": "Side income"
+    },
+    {
+        "date": "06.05.2026",
+        "type": "Income",
+        "amount": 50000,
+        "description": "Incentive"
     }
 ]

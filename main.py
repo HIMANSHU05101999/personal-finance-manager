@@ -109,13 +109,28 @@ def filter_transaction(transaction_list: list):
                 print("Invalid Date Format")       
 
         elif filter_choice==2:
-            pass
+            transaction_type=get_transaction_type()
+            filter_by_type(transaction_list,transaction_type)
         elif filter_choice==3:
             print("Returning...")
             return
         else:
             print("Invalid Entry")
-        
+          
+
+
+def filter_by_type(transaction_list: list, transaction_type: str):
+    view_list=[]
+    for transaction in transaction_list:
+        if transaction['type']==transaction_type:
+            view_list.append(transaction)
+    
+    if not view_list:
+        print("No Transaction Available")
+    else:
+        view_transaction(view_list)
+
+
 
 def filter_by_date(transaction_list: list, date: datetime):
     view_list=[]
