@@ -54,7 +54,7 @@ def load_transaction(transaction_file: str):
     
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
-    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Exit\nYour Choice: "))
+    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Exit\nYour Choice: "))
     return user_choice
     
 def get_transaction_date():
@@ -69,7 +69,7 @@ def get_transaction_date():
         else:
             print("Invalid Choice Enter Again!!!")
 
-def transaction_type():
+def get_transaction_type():
     while True:
         trans_type=int(input("Press 1: Income\nPress 2: Expense\n Choose:"))
         if trans_type==1:
@@ -82,22 +82,42 @@ def transaction_type():
             print("Invalid Entry")
     return transact_typ
 
+def balance_summary(transaction_list: list):
+    income=0
+    expense=0
+    if not transaction_list:
+        print("No Transaction Available")
+        return
+    for transaction in transaction_list:
+        if transaction['type']=="Income":
+            income+=transaction['amount']
+        elif transaction["type"] == "Expense":
+            expense+=transaction['amount']
+
+    print(f"Total Income:",income)
+    print(f"Total Expense:",expense)
+    print("-"*25)
+    print("Current Balance:",income-expense)
+        
+
 
 def main():
     transaction_file=Path(__file__).parent/"transaction_data.json"
     transaction_list=load_transaction(transaction_file)
     while True:
         user_choice=display_menu()
-        trans_type=0
+        #user_choice=3
         if user_choice==1:
-            transact_typ=transaction_type()
+            transact_type=get_transaction_type()
             date=get_transaction_date()
-            transaction=add_transaction(transact_typ,date)
+            transaction=add_transaction(transact_type,date)
             save_transaction(transaction,transaction_list,transaction_file)
 
         elif user_choice==2:
-            view_transaction(transaction_list)                   
+            view_transaction(transaction_list)      
         elif user_choice==3:
+            balance_summary(transaction_list)             
+        elif user_choice==4:
             print("Goodbye!!!")
             break
         else:
