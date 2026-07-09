@@ -18,9 +18,10 @@ def save_transaction(transaction: dict,transaction_list: list, transaction_file:
     
 
 def view_transaction(transaction_list: list):
-    if transaction_list:
-    
-        for transaction in transaction_list:
+    if not transaction_list:
+        print("No Transactions to Show!")
+        return
+    for transaction in transaction_list:
             date=transaction['date']
             transaction_type=transaction['type']
             amount=transaction['amount']
@@ -33,10 +34,7 @@ def view_transaction(transaction_list: list):
             print(f"Description: {description}")
             print(f"--------------------------")
     
-    else:
-        print("No Transactions to Show!")
-
-
+    
 
 def load_transaction(transaction_file: str):
     try:
@@ -54,7 +52,7 @@ def load_transaction(transaction_file: str):
     
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
-    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Exit\nYour Choice: "))
+    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Teansaction\n5.Exit\nYour Choice: "))
     return user_choice
     
 def get_transaction_date():
@@ -90,15 +88,46 @@ def balance_summary(transaction_list: list):
         return
     for transaction in transaction_list:
         if transaction['type']=="Income":
-            income+=transaction['amount']
+            income += transaction['amount']
         elif transaction["type"] == "Expense":
-            expense+=transaction['amount']
+            expense += transaction['amount']
 
     print(f"Total Income:",income)
     print(f"Total Expense:",expense)
     print("-"*25)
     print("Current Balance:",income-expense)
         
+def filter_transaction(transaction_list: list):
+    while True:
+        filter_choice=int(input("Press 1. Date\nPress 2. Type\nPress 3. Back\n Choice:"))
+        if filter_choice==1:
+            try:
+                date=input("Enter Date\n(DD.MM.YYYY:)")
+                filter_date=datetime.strptime(date,'%d.%m.%Y')
+                filter_by_date(transaction_list,filter_date)
+            except ValueError:
+                print("Invalid Date Format")       
+
+        elif filter_choice==2:
+            pass
+        elif filter_choice==3:
+            print("Returning...")
+            return
+        else:
+            print("Invalid Entry")
+        
+
+def filter_by_date(transaction_list: list, date: datetime):
+    view_list=[]
+    #filter_date=datetime.strptime(date,'%d.%m.%Y')
+    for transaction in transaction_list:
+        if datetime.strptime(transaction['date'],'%d.%m.%Y')==date:
+            view_list.append(transaction)
+    
+    if not view_list:
+        print("No Transaction Available")
+    else:
+        view_transaction(view_list)
 
 
 def main():
@@ -106,7 +135,7 @@ def main():
     transaction_list=load_transaction(transaction_file)
     while True:
         user_choice=display_menu()
-        #user_choice=3
+        #user_choice=4
         if user_choice==1:
             transact_type=get_transaction_type()
             date=get_transaction_date()
@@ -116,14 +145,14 @@ def main():
         elif user_choice==2:
             view_transaction(transaction_list)      
         elif user_choice==3:
-            balance_summary(transaction_list)             
+            balance_summary(transaction_list)          
         elif user_choice==4:
+            filter_transaction(transaction_list)
+        elif user_choice==5:
             print("Goodbye!!!")
             break
         else:
             print("Invalid menu option.")
-
-        
     
 
 if __name__=="__main__":
