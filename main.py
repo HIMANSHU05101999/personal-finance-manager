@@ -1,14 +1,36 @@
 from datetime import datetime
 import json 
 from pathlib import Path
+
+class Transaction():
+    def __init__(self, date: datetime, trans_type: str, amount: int, description: str):
+        self.date=date
+        self.trans_type=trans_type
+        self.amount=amount
+        self.description=description
+
+    def trans_to_dict(self):
+        return{"date":self.date,
+                "type":self.trans_type,
+                "amount":self.amount,
+                "description":self.description
+                }
+
+    def __str__(self):
+        return (f"--------------------------\nDate: {self.date}\nTransaction Type: {self.trans_type}\nAmount: {self.amount}\nDescription: {self.description}\n--------------------------")
+
+
+
 def add_transaction(transaction_type: str, date: str):
     amount=int(input("Enter amount:"))
     description=input("Enter description:")
-    transaction_detail={"date":date,
-                "type":transaction_type,
-                "amount":amount,
-                "description":description
-                }
+    #transaction_detail={"date":date,
+    #            "type":transaction_type,
+    #            "amount":amount,
+    #            "description":description
+    #            }
+    # Refactoring in Class
+    transaction_detail=Transaction(date,transaction_type,amount,description)
     return transaction_detail
 
 def save_transaction(transaction: dict,transaction_list: list, transaction_file: str):
@@ -16,7 +38,6 @@ def save_transaction(transaction: dict,transaction_list: list, transaction_file:
     with open(transaction_file,"w") as trans_file:
         json.dump(transaction_list, trans_file, indent=4)
     
-
 def view_transaction(transaction_list: list):
     if not transaction_list:
         print("No Transactions to Show!")
@@ -33,9 +54,7 @@ def view_transaction(transaction_list: list):
             print(f"Amount: {amount}")
             print(f"Description: {description}")
             print(f"--------------------------")
-    
-    
-
+       
 def load_transaction(transaction_file: str):
     try:
         with open(transaction_file) as trans_file:
@@ -52,7 +71,7 @@ def load_transaction(transaction_file: str):
     
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
-    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Teansaction\n5.Exit\nYour Choice: "))
+    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Teansaction\n5.Exit\n6.View_Class\n Your Choice: "))
     return user_choice
     
 def get_transaction_date():
@@ -117,8 +136,6 @@ def filter_transaction(transaction_list: list):
         else:
             print("Invalid Entry")
           
-
-
 def filter_by_type(transaction_list: list, transaction_type: str):
     view_list=[]
     for transaction in transaction_list:
@@ -129,8 +146,6 @@ def filter_by_type(transaction_list: list, transaction_type: str):
         print("No Transaction Available")
     else:
         view_transaction(view_list)
-
-
 
 def filter_by_date(transaction_list: list, date: datetime):
     view_list=[]
@@ -144,7 +159,6 @@ def filter_by_date(transaction_list: list, date: datetime):
     else:
         view_transaction(view_list)
 
-
 def main():
     transaction_file=Path(__file__).parent/"transaction_data.json"
     transaction_list=load_transaction(transaction_file)
@@ -155,7 +169,10 @@ def main():
             transact_type=get_transaction_type()
             date=get_transaction_date()
             transaction=add_transaction(transact_type,date)
-            save_transaction(transaction,transaction_list,transaction_file)
+            transaction_dict=transaction.trans_to_dict()
+            save_transaction(transaction_dict,transaction_list,transaction_file)
+            
+
 
         elif user_choice==2:
             view_transaction(transaction_list)      
@@ -166,6 +183,8 @@ def main():
         elif user_choice==5:
             print("Goodbye!!!")
             break
+        elif user_choice==6:
+            print(trans_with_class)
         else:
             print("Invalid menu option.")
     

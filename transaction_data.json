@@ -52,5 +52,41 @@
         "type": "Income",
         "amount": 50000,
         "description": "Incentive"
+    },
+    {
+        "date": "12.07.2026",
+        "type": "Income",
+        "amount": 5000,
+        "description": "Test"
+    },
+    {
+        "date": "12.07.2026",
+        "type": "Income",
+        "amount": 5000,
+        "description": "Class Test"
+    },
+    {
+        "date": "12.07.2026",
+        "type": "Income",
+        "amount": 5000,
+        "description": "Class test"
+    },
+    {
+        "date": "12.07.2026",
+        "type": "Income",
+        "amount": 5000,
+        "description": "Class Test"
+    },
+    {
+        "date": "12.07.2026",
+        "type": "Income",
+        "amount": 500,
+        "description": "Class Testing"
+    },
+    {
+        "date": "12.07.2026",
+        "type": "Income",
+        "amount": 500,
+        "description": "Class Testing"
     }
 ]
