@@ -2,6 +2,7 @@ from datetime import datetime
 import json 
 from pathlib import Path
 
+#Refactored the program in class and implemented class transaction as per last concepts I learned.
 class Transaction():
     def __init__(self, date: datetime, trans_type: str, amount: int, description: str):
         self.date=date
@@ -9,7 +10,7 @@ class Transaction():
         self.amount=amount
         self.description=description
 
-    def trans_to_dict(self):
+    def to_dict(self):
         return{"date":self.date,
                 "type":self.trans_type,
                 "amount":self.amount,
@@ -29,7 +30,7 @@ def add_transaction(transaction_type: str, date: str):
     #            "amount":amount,
     #            "description":description
     #            }
-    # Refactoring in Class
+    # Refactoring in Class Phase 1
     transaction_detail=Transaction(date,transaction_type,amount,description)
     return transaction_detail
 
@@ -71,7 +72,7 @@ def load_transaction(transaction_file: str):
     
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
-    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Teansaction\n5.Exit\n6.View_Class\n Your Choice: "))
+    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Teansaction\n5.Exit\n Your Choice: "))
     return user_choice
     
 def get_transaction_date():
@@ -99,6 +100,33 @@ def get_transaction_type():
             print("Invalid Entry")
     return transact_typ
 
+def summary_type(transaction_list: list):
+    while True:
+        summary_choice=int(input("1.Overall Summary\n2.Summary by Date\n3.Summary by Week\n4.Summary by Month\n5.Custom Range\n6.Exit\n Choice: "))
+        if summary_choice==1:
+            return balance_summary(transaction_list)
+        elif summary_choice==2:
+            while True:
+                try:
+                    date=input("Enter Date\n(DD.MM.YYYY:)")
+                    filter_date=datetime.strptime(date,'%d.%m.%Y')
+                    filtered_list=filter_by_date(transaction_list,filter_date)
+                    balance_summary(filtered_list)
+                    return
+                except ValueError:
+                    print("Invalid Date Format")     
+        elif summary_choice==3:
+            pass
+        elif summary_choice==4:
+            pass
+        elif summary_choice==5:
+            pass
+        elif summary_choice==6:
+            print("Returning...")
+            break
+        else:
+            print("Invalid Choice")  
+                    
 def balance_summary(transaction_list: list):
     income=0
     expense=0
@@ -123,7 +151,11 @@ def filter_transaction(transaction_list: list):
             try:
                 date=input("Enter Date\n(DD.MM.YYYY:)")
                 filter_date=datetime.strptime(date,'%d.%m.%Y')
-                filter_by_date(transaction_list,filter_date)
+                filtered_list=filter_by_date(transaction_list,filter_date)
+                if filtered_list:
+                    view_transaction(filtered_list)
+                else:
+                    print("No Teansaction")
             except ValueError:
                 print("Invalid Date Format")       
 
@@ -153,11 +185,7 @@ def filter_by_date(transaction_list: list, date: datetime):
     for transaction in transaction_list:
         if datetime.strptime(transaction['date'],'%d.%m.%Y')==date:
             view_list.append(transaction)
-    
-    if not view_list:
-        print("No Transaction Available")
-    else:
-        view_transaction(view_list)
+    return view_list
 
 def main():
     transaction_file=Path(__file__).parent/"transaction_data.json"
@@ -169,22 +197,19 @@ def main():
             transact_type=get_transaction_type()
             date=get_transaction_date()
             transaction=add_transaction(transact_type,date)
-            transaction_dict=transaction.trans_to_dict()
+            transaction_dict=transaction.to_dict() # Refactoring to Class Transaction Phase 1
             save_transaction(transaction_dict,transaction_list,transaction_file)
             
-
-
         elif user_choice==2:
             view_transaction(transaction_list)      
         elif user_choice==3:
-            balance_summary(transaction_list)          
+            summary_type(transaction_list)
+            #balance_summary(transaction_list)          
         elif user_choice==4:
             filter_transaction(transaction_list)
         elif user_choice==5:
             print("Goodbye!!!")
             break
-        elif user_choice==6:
-            print(trans_with_class)
         else:
             print("Invalid menu option.")
     
