@@ -1,109 +1,157 @@
-# Personal Finance Manager (Python CLI)
+# Personal Finance Manager
 
-A command-line Personal Finance Manager built with Python to practice software development fundamentals, clean code principles, and file handling before moving to database-backed applications.
+A command-line based Personal Finance Manager built using Python. This project allows users to record income and expenses, view transaction history, and generate financial summaries over different time periods.
 
 ## Features
 
 ### Transaction Management
 
-* Add new transactions
-* Choose transaction type (Income / Expense)
-* Enter custom transaction dates or use today's date
-* Add transaction descriptions
-* Automatically save transactions to a JSON file
+* Add Income transactions
+* Add Expense transactions
+* Store transactions persistently using JSON
+* View all saved transactions
 
-### Data Persistence
-
-* Transactions are stored in `transaction_data.json`
-* Data persists between program executions
-* Automatically creates the database file if it does not exist
-* Handles empty or corrupted JSON files gracefully
-
-### View Transactions
-
-* Display all saved transactions
-* User-friendly formatted output
-
-### Balance Summary
-
-* Calculate total income
-* Calculate total expenses
-* Display current balance
-
-### Search Transactions
+### Search & Filter
 
 * Search transactions by date
-* Search transactions by transaction type (Income / Expense)
+* Search transactions by transaction type (Income/Expense)
 
-## Technologies Used
+### Financial Summaries
 
-* Python 3
-* JSON
-* pathlib
-* datetime
+* Overall balance summary
+* Summary for a specific date
+* Monthly summary
+* Custom date range summary
+
+### Input Validation
+
+* Prevents invalid date formats
+* Prevents invalid month and year values
+* Prevents negative or zero transaction amounts
+* Validates custom date ranges
+
+---
 
 ## Project Structure
 
 ```text
-Personal Finance Manager/
+Personal-Finance-Manager/
 │
 ├── main.py
 ├── transaction_data.json
-└── README.md
+├── README.md
+└── .gitignore
 ```
 
-## Current Project Status
+---
 
-### Phase 1 ✅
+## Technologies Used
 
-* Project setup
-* Add transactions
-* JSON data persistence
-* View all transactions
-* Refactoring of menu and input handling
+* Python 3
+* JSON for data persistence
+* Object-Oriented Programming concepts:
 
-### Phase 2 (In Progress)
+  * Classes and Objects
+  * Constructors
+  * Instance Attributes
+  * Methods
+  * Encapsulation (initial implementation)
+  * Properties (learning phase)
 
-Completed:
+---
 
-* Balance Summary
-* Search by Date
-* Search by Transaction Type
+## Menu
 
-Upcoming:
+```text
+===== Personal Finance Manager =====
 
-* Transaction IDs
-* Edit Transaction
-* Delete Transaction
+1. Add Transaction
+2. View Transaction
+3. Balance Summary
+4. Search Transaction
+5. Exit
+```
 
-### Future Plans
+### Summary Options
 
-* SQLite database integration
-* Monthly reports
-* Category-wise summaries
-* Budget tracking
-* CSV export
-* Data visualization
-* Unit testing
-* Object-Oriented refactoring
-* GUI/Web version
+```text
+1. Overall Summary
+2. Summary by Date
+3. Summary by Month
+4. Custom Range
+5. Exit
+```
 
-## Learning Goals
+---
 
-This project is being developed incrementally to strengthen understanding of:
+## Example Summary Output
 
-* Functions
-* Modular programming
-* File handling
-* Exception handling
-* JSON data storage
-* Data structures
-* Code refactoring
-* Software design principles
-* Version control with Git
+```text
+Total Income: 32000
+Total Expense: 6002
+-------------------------
+Current Balance: 25998
+```
+
+---
+
+## Future Improvements
+
+### Planned Features
+
+* Edit Transactions
+* Delete Transactions
+* Transaction Categories
+* Category-wise Summary
+* Sorting Transactions
+* CSV Export
+* Better OOP Refactoring
+
+### Planned Refactoring
+
+After implementing all planned functionality, the project will be refactored into multiple classes such as:
+
+* `Transaction`
+* `TransactionManager`
+* `SummaryManager`
+* `FileManager`
+
+This will improve maintainability and better demonstrate Object-Oriented Programming principles.
+
+---
+
+## Learning Objectives
+
+This project is being developed alongside the **MOOC.fi Advanced Python Programming** course and serves as a practical implementation of concepts learned during the journey toward becoming a Software Engineer and AI Engineer.
+
+Current concepts applied:
+
+✔ Functions
+✔ File Handling
+✔ JSON Handling
+✔ Classes & Objects
+✔ Constructors
+✔ Methods
+✔ Basic OOP Design
+✔ Input Validation
+✔ Date Handling with `datetime`
+
+---
+
+## How to Run
+
+```bash
+git clone https://github.com/HIMANSHU05101999/personal-finance-manager.git
+
+cd personal-finance-manager
+
+python main.py
+```
+
+---
 
 ## Author
 
-**Himanshu Kumar**
+**Himanshu Kumar Dubey**
 
-Built as part of my journey toward becoming an AI Engineer while strengthening Python software development fundamentals through real-world projects.
+This project is part of my Python and Software Engineering learning journey.
