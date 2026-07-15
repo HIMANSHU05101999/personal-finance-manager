@@ -88,5 +88,17 @@
         "type": "Income",
         "amount": 500,
         "description": "Class Testing"
+    },
+    {
+        "date": "29.12.2026",
+        "type": "Income",
+        "amount": 1000000,
+        "description": "Lucky Draw"
+    },
+    {
+        "date": "03.01.2027",
+        "type": "Expense",
+        "amount": 10000,
+        "description": "Party"
     }
 ]

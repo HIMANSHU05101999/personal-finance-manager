@@ -4,7 +4,7 @@ from pathlib import Path
 
 #Refactored the program in class and implemented class transaction as per last concepts I learned.
 class Transaction():
-    def __init__(self, date: datetime, trans_type: str, amount: int, description: str):
+    def __init__(self, date: str, trans_type: str, amount: int, description: str):
         self.date=date
         self.trans_type=trans_type
         self.amount=amount
@@ -23,7 +23,17 @@ class Transaction():
 
 
 def add_transaction(transaction_type: str, date: str):
-    amount=int(input("Enter amount:"))
+    
+    while True:
+        try:
+            amount=int(input("Enter amount:"))
+            if amount<=0:
+                print("Amount should be greater than 0")
+                continue
+            break
+        except ValueError:
+            print("Invalid Amount")
+
     description=input("Enter description:")
     #transaction_detail={"date":date,
     #            "type":transaction_type,
@@ -72,7 +82,7 @@ def load_transaction(transaction_file: str):
     
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
-    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Teansaction\n5.Exit\n Your Choice: "))
+    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Transaction\n5.Exit\n Your Choice: "))
     return user_choice
     
 def get_transaction_date():
@@ -100,7 +110,7 @@ def get_transaction_type():
             print("Invalid Entry")
     return transact_typ
 
-def summary_type(transaction_list: list):
+def summary_menu(transaction_list: list):
     while True:
         summary_choice=int(input("1.Overall Summary\n2.Summary by Date\n3.Summary by Month\n4.Custom Range\n5.Exit\n Choice: "))
         if summary_choice==1:
@@ -116,20 +126,32 @@ def summary_type(transaction_list: list):
                 except ValueError:
                     print("Invalid Date Format")     
         elif summary_choice==3:
-            pass
+                try:
+                    mon=int(input("Enter Month(1-12)\n"))
+                    if mon<1 or mon>12:
+                        raise ValueError ("Invalid Month")
+                    yr=int(input("Enter Year(YYYY)\n"))
+                    if yr < 1000 or yr > 9999:
+                        raise ValueError ("Invalid Year")
+                    filtered_list= monthly_summary(transaction_list,mon,yr)
+                    balance_summary(filtered_list)
+                    return
+                except ValueError:
+                    print("Invalid Month or Year")
         elif summary_choice==4:
             while True:
                 try:
                     s_date=input("Enter Start Date\n(DD.MM.YYYY:)")
                     start_date=datetime.strptime(s_date,'%d.%m.%Y')
-                    e_date=input("Enter Start Date\n(DD.MM.YYYY:)")
+                    e_date=input("Enter End Date\n(DD.MM.YYYY:)")
                     end_date=datetime.strptime(e_date,'%d.%m.%Y')
+                    if start_date>end_date:
+                        raise ValueError
                     filtered_list=custom_range_summary(transaction_list,start_date,end_date)
                     balance_summary(filtered_list)
-                    view_transaction(filtered_list)
                     return
                 except ValueError:
-                    print("Invalid Date Format")
+                    print("Invalid Date Format or Date Range")
         elif summary_choice==5:
             print("Returning...")
             break
@@ -138,12 +160,17 @@ def summary_type(transaction_list: list):
 
 def custom_range_summary(transaction_list: list, sdate: datetime, edate: datetime):
     view_list=[]
-    #filter_date=datetime.strptime(date,'%d.%m.%Y')
     for transaction in transaction_list:
         if sdate<=datetime.strptime(transaction['date'],'%d.%m.%Y')<=edate:
             view_list.append(transaction)
     return view_list
 
+def monthly_summary(transaction_list: list, mon: int, yr: int):
+    view_list=[]
+    for transaction in transaction_list:
+        if datetime.strptime(transaction['date'],'%d.%m.%Y').month==mon and datetime.strptime(transaction['date'],'%d.%m.%Y').year==yr:
+            view_list.append(transaction)
+    return view_list
                     
 def balance_summary(transaction_list: list):
     income=0
@@ -173,7 +200,7 @@ def filter_transaction(transaction_list: list):
                 if filtered_list:
                     view_transaction(filtered_list)
                 else:
-                    print("No Teansaction")
+                    print("No Transaction")
             except ValueError:
                 print("Invalid Date Format")       
 
@@ -221,7 +248,7 @@ def main():
         elif user_choice==2:
             view_transaction(transaction_list)      
         elif user_choice==3:
-            summary_type(transaction_list)        
+            summary_menu(transaction_list)        
         elif user_choice==4:
             filter_transaction(transaction_list)
         elif user_choice==5:
