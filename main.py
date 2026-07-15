@@ -31,8 +31,8 @@ def add_transaction(transaction_type: str, date: str):
     #            "description":description
     #            }
     # Refactoring in Class Phase 1
-    transaction_detail=Transaction(date,transaction_type,amount,description)
-    return transaction_detail
+    transaction_detail=Transaction(date,transaction_type,amount,description) # Object of Transaction
+    return transaction_detail # Return Object of class transacation
 
 def save_transaction(transaction: dict,transaction_list: list, transaction_file: str):
     transaction_list.append(transaction)
@@ -102,7 +102,7 @@ def get_transaction_type():
 
 def summary_type(transaction_list: list):
     while True:
-        summary_choice=int(input("1.Overall Summary\n2.Summary by Date\n3.Summary by Week\n4.Summary by Month\n5.Custom Range\n6.Exit\n Choice: "))
+        summary_choice=int(input("1.Overall Summary\n2.Summary by Date\n3.Summary by Month\n4.Custom Range\n5.Exit\n Choice: "))
         if summary_choice==1:
             return balance_summary(transaction_list)
         elif summary_choice==2:
@@ -118,14 +118,32 @@ def summary_type(transaction_list: list):
         elif summary_choice==3:
             pass
         elif summary_choice==4:
-            pass
+            while True:
+                try:
+                    s_date=input("Enter Start Date\n(DD.MM.YYYY:)")
+                    start_date=datetime.strptime(s_date,'%d.%m.%Y')
+                    e_date=input("Enter Start Date\n(DD.MM.YYYY:)")
+                    end_date=datetime.strptime(e_date,'%d.%m.%Y')
+                    filtered_list=custom_range_summary(transaction_list,start_date,end_date)
+                    balance_summary(filtered_list)
+                    view_transaction(filtered_list)
+                    return
+                except ValueError:
+                    print("Invalid Date Format")
         elif summary_choice==5:
-            pass
-        elif summary_choice==6:
             print("Returning...")
             break
         else:
             print("Invalid Choice")  
+
+def custom_range_summary(transaction_list: list, sdate: datetime, edate: datetime):
+    view_list=[]
+    #filter_date=datetime.strptime(date,'%d.%m.%Y')
+    for transaction in transaction_list:
+        if sdate<=datetime.strptime(transaction['date'],'%d.%m.%Y')<=edate:
+            view_list.append(transaction)
+    return view_list
+
                     
 def balance_summary(transaction_list: list):
     income=0
@@ -196,15 +214,14 @@ def main():
         if user_choice==1:
             transact_type=get_transaction_type()
             date=get_transaction_date()
-            transaction=add_transaction(transact_type,date)
-            transaction_dict=transaction.to_dict() # Refactoring to Class Transaction Phase 1
+            transaction=add_transaction(transact_type,date) #Saves Object of Class Transaction
+            transaction_dict=transaction.to_dict() # uses method of class transaction to conver the user input data to dictionary
             save_transaction(transaction_dict,transaction_list,transaction_file)
             
         elif user_choice==2:
             view_transaction(transaction_list)      
         elif user_choice==3:
-            summary_type(transaction_list)
-            #balance_summary(transaction_list)          
+            summary_type(transaction_list)        
         elif user_choice==4:
             filter_transaction(transaction_list)
         elif user_choice==5:
