@@ -4,7 +4,7 @@ from pathlib import Path
 
 #Refactored the program in class and implemented class transaction as per last concepts I learned.
 class Transaction():
-    def __init__(self, date: str, trans_type: str, amount: int, description: str, transaction_id: str):
+    def __init__(self, date: str, trans_type: str, amount: int, description: str, transaction_id: int):
         self.__id=transaction_id
         self.__date=date
         self.__trans_type=trans_type
@@ -20,11 +20,11 @@ class Transaction():
                 }
 
     def __str__(self):
-        return (f"--------------------------\nDate: {self.date}\nTransaction Type: {self.trans_type}\nAmount: {self.amount}\nDescription: {self.description}\n--------------------------")
+        return (f"--------------------------\nID: {self.__id}\nDate: {self.__date}\nTransaction Type: {self.__trans_type}\nAmount: {self.__amount}\nDescription: {self.__description}\n--------------------------")
 
 
 
-def add_transaction(transaction_type: str, date: str, transaction_id: str):
+def add_transaction(transaction_type: str, date: str, transaction_id: int):
     
     while True:
         try:
@@ -244,7 +244,6 @@ def filter_by_type(transaction_list: list, transaction_type: str):
 
 def filter_by_date(transaction_list: list, date: datetime):
     view_list=[]
-    #filter_date=datetime.strptime(date,'%d.%m.%Y')
     for transaction in transaction_list:
         if datetime.strptime(transaction['date'],'%d.%m.%Y')==date:
             view_list.append(transaction)
@@ -264,18 +263,34 @@ def transaction_id_generator(transaction_list):
 
 def delete_transaction(transaction_list: list, transaction_file):
     while True:
-        transaction_id=input("Enter the Transaction ID you want to delete")
-        for index, transaction in enumerate(transaction_list):
-            if "id" in transaction:
-                if transaction["id"]==transaction_id:
-                    del transaction_list[index]
-                    print("Transaction Deleted Successfully")
-                    save_database_after_deletion(transaction_list, transaction_file)
-                else:
-                    print("Transaction does not exist, please confirm the Transaction ID from View Transaction")
-        return
-        
-def save_database_after_deletion(transaction_list: str,transaction_file):
+        try:
+            choice=int(input("1.Continue\n2.Quite\n Your Choice: "))
+        except ValueError:
+            print("Invalid Choice")
+            continue
+        if choice==1:
+            found=False
+            try:
+                transaction_id=int(input("Enter the Transaction ID you want to Delete: "))
+            except ValueError:
+                print("Invalid ID")
+                continue
+            for index, transaction in enumerate(transaction_list):
+                if "id" in transaction:
+                    if transaction["id"]==transaction_id:
+                        found=True
+                        del transaction_list[index]
+                        print("Transaction Deleted Successfully")
+                        save_database_after_deletion(transaction_list, transaction_file)
+                        return
+            if not found:
+                print("Transaction does not exist, please confirm the Transaction ID from View Transaction")
+        elif choice==2:
+            return
+        else:
+            print("Invalid Choice")
+
+def save_database_after_deletion(transaction_list: list,transaction_file):
     with open(transaction_file,"w") as trans_file:
         json.dump(transaction_list, trans_file, indent=4)
     
@@ -290,7 +305,7 @@ def main():
         if user_choice==1:
             transact_type=get_transaction_type()
             date=get_transaction_date()
-            transaction_id=str(transaction_id_generator(transaction_list))
+            transaction_id=transaction_id_generator(transaction_list)
             transaction=add_transaction(transact_type,date,transaction_id) #Saves Object of Class Transaction
             transaction_dict=transaction.to_dict() # uses instance method of class transaction to conver the user input data to dictionary
             save_transaction(transaction_dict,transaction_list,transaction_file)
