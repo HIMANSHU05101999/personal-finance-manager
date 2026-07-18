@@ -4,17 +4,19 @@ from pathlib import Path
 
 #Refactored the program in class and implemented class transaction as per last concepts I learned.
 class Transaction():
-    def __init__(self, date: str, trans_type: str, amount: int, description: str):
-        self.date=date
-        self.trans_type=trans_type
-        self.amount=amount
-        self.description=description
+    def __init__(self, date: str, trans_type: str, amount: int, description: str, transaction_id: str):
+        self.__id=transaction_id
+        self.__date=date
+        self.__trans_type=trans_type
+        self.__amount=amount
+        self.__description=description
 
     def to_dict(self):
-        return{"date":self.date,
-                "type":self.trans_type,
-                "amount":self.amount,
-                "description":self.description
+        return{ "id":self.__id,
+                "date":self.__date,
+                "type":self.__trans_type,
+                "amount":self.__amount,
+                "description":self.__description
                 }
 
     def __str__(self):
@@ -22,7 +24,7 @@ class Transaction():
 
 
 
-def add_transaction(transaction_type: str, date: str):
+def add_transaction(transaction_type: str, date: str, transaction_id: str):
     
     while True:
         try:
@@ -41,7 +43,7 @@ def add_transaction(transaction_type: str, date: str):
     #            "description":description
     #            }
     # Refactoring in Class Phase 1
-    transaction_detail=Transaction(date,transaction_type,amount,description) # Object of Transaction
+    transaction_detail=Transaction(date,transaction_type,amount,description,transaction_id) # Object of Transaction
     return transaction_detail # Return Object of class transacation
 
 def save_transaction(transaction: dict,transaction_list: list, transaction_file: str):
@@ -232,6 +234,21 @@ def filter_by_date(transaction_list: list, date: datetime):
             view_list.append(transaction)
     return view_list
 
+def transaction_id_generator(transaction_list):
+    transaction_id=1
+    max_id=0
+    if transaction_list==[]:
+        return transaction_id
+    
+    for item in transaction_list:
+        if "id" in item:
+            if max_id<int(item["id"]):
+                max_id=int(item["id"])
+    return max_id+1
+
+
+
+
 def main():
     transaction_file=Path(__file__).parent/"transaction_data.json"
     transaction_list=load_transaction(transaction_file)
@@ -241,8 +258,9 @@ def main():
         if user_choice==1:
             transact_type=get_transaction_type()
             date=get_transaction_date()
-            transaction=add_transaction(transact_type,date) #Saves Object of Class Transaction
-            transaction_dict=transaction.to_dict() # uses method of class transaction to conver the user input data to dictionary
+            transaction_id=str(transaction_id_generator(transaction_list))
+            transaction=add_transaction(transact_type,date,transaction_id) #Saves Object of Class Transaction
+            transaction_dict=transaction.to_dict() # uses instance method of class transaction to conver the user input data to dictionary
             save_transaction(transaction_dict,transaction_list,transaction_file)
             
         elif user_choice==2:
