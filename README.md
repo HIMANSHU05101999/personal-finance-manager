@@ -1,41 +1,117 @@
-# Personal Finance Manager
+# Personal Finance Manager (CLI)
 
-A command-line based Personal Finance Manager built using Python. This project allows users to record income and expenses, view transaction history, and generate financial summaries over different time periods.
+A command-line based Personal Finance Manager built using Python. The project helps users record and manage their personal income and expenses, view summaries, search transactions, and maintain persistent financial records using JSON storage.
+
+---
 
 ## Features
 
 ### Transaction Management
 
-* Add Income transactions
-* Add Expense transactions
-* Store transactions persistently using JSON
-* View all saved transactions
+* Add Income and Expense transactions
+* Automatic Transaction ID generation
+* Delete transactions using Transaction ID
+* Persistent storage using JSON files
 
-### Search & Filter
+### Transaction Information
 
-* Search transactions by date
-* Search transactions by transaction type (Income/Expense)
+Each transaction stores:
 
-### Financial Summaries
+* Transaction ID
+* Date
+* Transaction Type (Income/Expense)
+* Amount
+* Description
 
-* Overall balance summary
-* Summary for a specific date
-* Monthly summary
-* Custom date range summary
+---
 
-### Input Validation
+## Summary Features
 
-* Prevents invalid date formats
-* Prevents invalid month and year values
-* Prevents negative or zero transaction amounts
-* Validates custom date ranges
+### Overall Summary
+
+Displays:
+
+* Total Income
+* Total Expense
+* Current Balance
+
+### Summary by Date
+
+View financial summary for a specific date.
+
+### Summary by Month
+
+View financial summary for a specific month and year.
+
+### Custom Date Range Summary
+
+Generate summaries between two custom dates.
+
+---
+
+## Search Features
+
+Search transactions by:
+
+* Date
+* Transaction Type
+
+---
+
+## Validation Implemented
+
+### Amount Validation
+
+* Amount must be greater than 0.
+* Invalid numeric input is handled.
+
+### Date Validation
+
+* Supports `DD.MM.YYYY` format.
+* Invalid dates and date ranges are handled.
+
+### Month and Year Validation
+
+* Month restricted between `1-12`.
+* Year validation added.
+
+### Transaction Deletion Validation
+
+* Invalid IDs handled.
+* User confirmation before deletion.
+* Graceful handling when transaction does not exist.
+
+### Backward Compatibility
+
+Older transaction records without Transaction IDs are still supported.
+
+---
+
+## Concepts Practiced
+
+This project is being developed alongside the **MOOC.fi Advanced Python** course and currently implements concepts such as:
+
+* Classes and Objects
+* Constructors (`__init__`)
+* Encapsulation
+* Private Attributes
+* Instance Methods
+* `__str__` Method
+* JSON File Handling
+* Exception Handling (`try-except`)
+* Functions and Modular Programming
+* Lists and Dictionaries
+* Date Handling using `datetime`
+* Persistence using JSON files
+* Enumerate
+* Type Hints
 
 ---
 
 ## Project Structure
 
 ```text
-Personal-Finance-Manager/
+personal-finance-manager/
 │
 ├── main.py
 ├── transaction_data.json
@@ -45,22 +121,21 @@ Personal-Finance-Manager/
 
 ---
 
-## Technologies Used
+## Sample Transaction Record
 
-* Python 3
-* JSON for data persistence
-* Object-Oriented Programming concepts:
-
-  * Classes and Objects
-  * Constructors
-  * Instance Attributes
-  * Methods
-  * Encapsulation (initial implementation)
-  * Properties (learning phase)
+```json
+{
+    "id": 5,
+    "date": "19.07.2026",
+    "type": "Expense",
+    "amount": 500,
+    "description": "Books"
+}
+```
 
 ---
 
-## Menu
+## Current Menu
 
 ```text
 ===== Personal Finance Manager =====
@@ -69,84 +144,39 @@ Personal-Finance-Manager/
 2. View Transaction
 3. Balance Summary
 4. Search Transaction
-5. Exit
-```
-
-### Summary Options
-
-```text
-1. Overall Summary
-2. Summary by Date
-3. Summary by Month
-4. Custom Range
-5. Exit
-```
-
----
-
-## Example Summary Output
-
-```text
-Total Income: 32000
-Total Expense: 6002
--------------------------
-Current Balance: 25998
+5. Delete Transaction
+6. Exit
 ```
 
 ---
 
 ## Future Improvements
 
-### Planned Features
+Planned features:
 
-* Edit Transactions
-* Delete Transactions
-* Transaction Categories
-* Category-wise Summary
-* Sorting Transactions
-* CSV Export
-* Better OOP Refactoring
-
-### Planned Refactoring
-
-After implementing all planned functionality, the project will be refactored into multiple classes such as:
-
-* `Transaction`
-* `TransactionManager`
-* `SummaryManager`
-* `FileManager`
-
-This will improve maintainability and better demonstrate Object-Oriented Programming principles.
+* Edit Transaction
+* Category System (Food, Bills, Salary, Shopping, etc.)
+* Export transactions to CSV
+* Budget Tracking
+* Monthly Reports
+* Statistics and Analytics
+* Transaction Sorting
+* Recurring Transactions
+* Full Object-Oriented Refactoring
+* SQLite Database Integration
+* GUI Version (Tkinter/Web App)
 
 ---
 
-## Learning Objectives
+## Learning Goal
 
-This project is being developed alongside the **MOOC.fi Advanced Python Programming** course and serves as a practical implementation of concepts learned during the journey toward becoming a Software Engineer and AI Engineer.
+This project is primarily being developed as a learning project to strengthen understanding of:
 
-Current concepts applied:
-
-✔ Functions
-✔ File Handling
-✔ JSON Handling
-✔ Classes & Objects
-✔ Constructors
-✔ Methods
-✔ Basic OOP Design
-✔ Input Validation
-✔ Date Handling with `datetime`
-
----
-
-## How to Run
-
-```bash
-git clone https://github.com/HIMANSHU05101999/personal-finance-manager.git
-
-cd personal-finance-manager
-
-python main.py
-```
+* Python Programming
+* Object-Oriented Programming
+* Data Persistence
+* Software Design
+* Building Real-World CLI Applications
 
 ---
 
@@ -154,4 +184,5 @@ python main.py
 
 **Himanshu Kumar Dubey**
 
-This project is part of my Python and Software Engineering learning journey.
+BCA Graduate | MCA Student
+Aspiring Software Engineer / AI Engineer
