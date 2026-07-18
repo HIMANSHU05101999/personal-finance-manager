@@ -108,24 +108,17 @@
         "description": "Testing teans_id_gen"
     },
     {
-        "id": "1",
-        "date": "19.07.2026",
-        "type": "Income",
-        "amount": 500,
-        "description": "testing transaction id"
-    },
-    {
-        "id": "2",
-        "date": "19.07.2026",
-        "type": "Income",
-        "amount": 500,
-        "description": "testing transaction id exception"
-    },
-    {
         "id": "3",
         "date": "19.07.2026",
         "type": "Income",
         "amount": 500,
         "description": "test id generator handling edge case"
+    },
+    {
+        "id": "4",
+        "date": "19.07.2026",
+        "type": "Income",
+        "amount": 500,
+        "description": "test final check"
     }
 ]

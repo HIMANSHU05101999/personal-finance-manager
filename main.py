@@ -55,18 +55,34 @@ def view_transaction(transaction_list: list):
     if not transaction_list:
         print("No Transactions to Show!")
         return
-    for transaction in transaction_list:
-            date=transaction['date']
-            transaction_type=transaction['type']
-            amount=transaction['amount']
-            description=transaction['description']
     
-            print("--------------------------")
-            print(f"Date: {date}")
-            print(f"Transaction Type: {transaction_type}")
-            print(f"Amount: {amount}")
-            print(f"Description: {description}")
-            print(f"--------------------------")
+    for transaction in transaction_list:
+            if "id" in transaction:
+                id=transaction['id']
+                date=transaction['date']
+                transaction_type=transaction['type']
+                amount=transaction['amount']
+                description=transaction['description']
+    
+                print("--------------------------")
+                print(f"ID: {id}")
+                print(f"Date: {date}")
+                print(f"Transaction Type: {transaction_type}")
+                print(f"Amount: {amount}")
+                print(f"Description: {description}")
+                print(f"--------------------------")
+            else:
+                date=transaction['date']
+                transaction_type=transaction['type']
+                amount=transaction['amount']
+                description=transaction['description']
+    
+                print("--------------------------")
+                print(f"Date: {date}")
+                print(f"Transaction Type: {transaction_type}")
+                print(f"Amount: {amount}")
+                print(f"Description: {description}")
+                print(f"--------------------------")
        
 def load_transaction(transaction_file: str):
     try:
@@ -84,17 +100,17 @@ def load_transaction(transaction_file: str):
     
 def display_menu():
     print(("\n===== Personal Finance Manager ====="))
-    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Transaction\n5.Exit\n Your Choice: "))
+    user_choice=int(input("1.Add Transaction\n2.View Transaction\n3.Balance Summary\n4.Search Transaction\n5.Delete Transaction\n6.Exit\n Your Choice: "))
     return user_choice
     
 def get_transaction_date():
     while True:
-        date_choice=int(input("Press 1: Update Date\nPress 2: Continue with Today's Date\n Choose: "))
-        if date_choice==1:
+        date_choice=int(input("Press 1: Continue with Today's Date\nPress 2: Update Date\n Choose: "))
+        if date_choice==2:
             date=input("Enter Date (DD.MM.YYYY): ")
             date=datetime.strptime(date,'%d.%m.%Y')
             return date.strftime("%d.%m.%Y")
-        elif date_choice==2:
+        elif date_choice==1:
             return datetime.today().strftime('%d.%m.%Y')
         else:
             print("Invalid Choice Enter Again!!!")
@@ -246,7 +262,23 @@ def transaction_id_generator(transaction_list):
                 max_id=int(item["id"])
     return max_id+1
 
-
+def delete_transaction(transaction_list: list, transaction_file):
+    while True:
+        transaction_id=input("Enter the Transaction ID you want to delete")
+        for index, transaction in enumerate(transaction_list):
+            if "id" in transaction:
+                if transaction["id"]==transaction_id:
+                    del transaction_list[index]
+                    print("Transaction Deleted Successfully")
+                    save_database_after_deletion(transaction_list, transaction_file)
+                else:
+                    print("Transaction does not exist, please confirm the Transaction ID from View Transaction")
+        return
+        
+def save_database_after_deletion(transaction_list: str,transaction_file):
+    with open(transaction_file,"w") as trans_file:
+        json.dump(transaction_list, trans_file, indent=4)
+    
 
 
 def main():
@@ -254,7 +286,7 @@ def main():
     transaction_list=load_transaction(transaction_file)
     while True:
         user_choice=display_menu()
-        #user_choice=4
+        #user_choice=5
         if user_choice==1:
             transact_type=get_transaction_type()
             date=get_transaction_date()
@@ -270,6 +302,8 @@ def main():
         elif user_choice==4:
             filter_transaction(transaction_list)
         elif user_choice==5:
+            delete_transaction(transaction_list,transaction_file)
+        elif user_choice==6:
             print("Goodbye!!!")
             break
         else:
